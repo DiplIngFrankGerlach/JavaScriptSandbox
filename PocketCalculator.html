@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<script>
+function fakultaet(x) 
+{
+    if( x == 1 )
+    {
+       return 1;
+    }
+    else
+    {
+       return x*fakultaet(x-1);
+    }
+}
+
+var trAkku=0;
+var trOperand = 0;
+var akkuVoll = false;
+
+function tasteGedr(x)
+{
+   if( !akkuVoll )
+   {
+      trAkku *= 10;
+      trAkku = trAkku + x;
+      updateDisplay();
+   }
+   else
+   {
+      trOperand *= 10;
+      trOperand = trOperand + x;
+      updateDisplay();
+   }
+}
+
+var operationStore = '+';
+
+function compute(operation)
+{
+   switch(operation)
+   {
+     case '+':
+     case '-':
+     case '*':
+     case '/':operationStore = operation;
+              akkuVoll = true;
+     break;
+     case '=':
+     {
+         switch(operationStore)
+         {
+              case '+': trAkku += trOperand; trOperand=0; break;
+              case '-': trAkku -= trOperand; trOperand=0; break;
+              case '*': trAkku *= trOperand; trOperand=0; break;
+              case '/': trAkku /= trOperand; trOperand=0; break;
+         }
+         updateDisplay();
+     }
+   }
+}
+
+function clearc()
+{
+  trAkku=0;
+  trOperand=0;
+  akkuVoll = false;
+  updateDisplay();
+}
+
+var trAkkuDisplay;
+var tr
+
+function updateDisplay()
+{
+   document.getElementById("akku").innerHTML = trAkku;
+   document.getElementById("operand").innerHTML = trOperand;
+}
+
+
+</script>
+
+
+
+<h2>Pocket Calculator in JavaScript</h2>
+
+<button type="button" onclick='document.getElementById("demo").innerHTML = "Hello JavaScript!"; console.log("XX");'>Click Me!</button>
+
+<button type="button" onclick='console.log(fakultaet(10));'>Fakultaet</button>
+
+<table> <tr> <td id="akku">0</td> <td id="operand">0</td> </tr> </table>
+
+<table>
+  <tr> <td> <button type="button" onclick='tasteGedr(0)'>0</button> </td> 
+       <td> <button type="button" onclick='tasteGedr(1)'>1</button> </td>
+       <td> <button type="button" onclick='tasteGedr(2)'>2</button> </td>    
+  </tr>
+  <tr> <td> <button type="button" onclick='tasteGedr(3)'>3</button> </td> 
+       <td> <button type="button" onclick='tasteGedr(4)'>4</button> </td>
+       <td> <button type="button" onclick='tasteGedr(5)'>5</button> </td>    
+  </tr>
+  <tr> <td> <button type="button" onclick='tasteGedr(6)'>6</button> </td> 
+       <td> <button type="button" onclick='tasteGedr(7)'>7</button> </td>
+       <td> <button type="button" onclick='tasteGedr(8)'>8</button> </td>    
+  </tr>
+  
+  <tr> <td> <button type="button" onclick='tasteGedr(9)'>9</button> </td>
+
+  </tr>
+  <tr> <td> <button type="button" onclick='compute("+")'>+</button> </td>
+       <td> <button type="button" onclick='compute("-")'>-</button> </td>
+       <td> <button type="button" onclick='compute("*")'>*</button> </td>    
+  </tr>
+  <tr> <td> <button type="button" onclick='compute("/")'>/</button> </td>
+       <td> <button type="button" onclick='compute("=")'>=</button> </td>
+       <td> <button type="button" onclick='clearc()'>clear</button> </td>
+  </tr>
+</table>
+
+</body>
+</html>
