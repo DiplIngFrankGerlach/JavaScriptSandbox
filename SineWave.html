@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1> Painting a Sine Wave on a Canvas</h1>
+<p>by Dipl. Ing.(BA) Frank Gerlach</p>
+
+
+<canvas id="Canvas"
+    width="600" height="600"
+    style="height:600px;width:600px;">
+</canvas>
+
+
+<script>
+
+
+
+
+
+var c = document.getElementById("Canvas");
+var ctx = c.getContext("2d");
+
+ctx.fillStyle = "rgb(200,0,0)";
+
+
+function paintPixel(x,y)
+{
+   ctx.fillRect(x, y, 1, 1);
+}
+
+var x=0.0;
+
+while( x < 360 )
+{
+   var arc = x/360.0*2.0*Math.PI;
+   var y = Math.sin(arc);
+   y *= (580.0/2.0);
+   //console.log(x+" "+y);
+   paintPixel(x,y+300);
+   x++;
+}
+
+
+</script>
+
+
+
+
+
+</body>
+</html>
