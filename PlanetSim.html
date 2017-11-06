@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1> Planetary Simulation </h2>
+<p> By Dipl. Ing.(BA) Frank Gerlach</p>
+
+<p> Perform a planetary n-body simulation in two dimensions, using Newton's law
+    of gravitation. The code is fully in Javascript, executing in the browser.
+<p>
+
+<h2>Planetary location and speed vectors</h2>
+<p>the speed and location vectors are assumed to be initially all on the same horizontal/vertical axis.
+   For a more realistic simulation, the actual vectors should be used. Note that other solar systems
+   than "ours" can also be entered into the bodyArray data structure
+</p>
+
+
+<canvas id="Canvas"
+    width="600" height="600"
+    style="height:600px;width:600px;">
+</canvas>
+
+
+<script>
+
+
+
+
+
+var c = document.getElementById("Canvas");
+var ctx = c.getContext("2d");
+
+ctx.fillStyle = "rgb(200,0,0)";
+
+
+function paintPixel(x,y)
+{
+   ctx.fillRect(x, y, 1, 1);
+}
+
+
+
+function square(x)
+{
+   return x*x;
+}
+
+var G=6.674E-11;//Gravitational constant
+
+function newtonForce(bodyA,bodyB)
+{
+   var distanceX = bodyA.x-bodyB.x;
+   var distanceY = bodyA.y-bodyB.y;
+   var distance = Math.sqrt( square(distanceX) + square(distanceY) );//note:sqrt() can be optimized away !
+
+   var f = G * bodyA.mass*bodyB.mass/square(distance);
+
+   return f;
+}
+
+/* simulate the forces on body with "bodyIndex" in bodyArray, which is 
+   an array of planets. 
+   Proceed to simulate the movement of the planet/body during a simulation step
+   timeStep is the number of seconds of the simulation step
+*/
+function simulateBodyMove(bodyIndex,bodyArray,timeStep)
+{
+   var fxSum=0.0;
+   var fySum=0.0;
+
+   var body = bodyArray[bodyIndex];  
+
+   for (var i=0; i < bodyArray.length; i++) 
+   {
+      if( i != bodyIndex )
+      {
+         var bodyB = bodyArray[i];
+         var f = newtonForce(body,bodyB);
+         var distanceX = body.x-bodyB.x;
+         var distanceY = body.y-bodyB.y;
+         var distance = Math.sqrt( square(distanceX) + square(distanceY) );
+         var fx = -distanceX/distance*f;
+         var fy = -distanceY/distance*f;
+         fxSum += fx;
+         fySum += fy;            
+      }
+   } 
+   var ax = fxSum/body.mass;
+   body.vx = ax*timeStep + body.vx;
+   body.x = body.vx*timeStep + body.x;
+   
+
+   var ay = fySum/body.mass;
+   body.vy = ay*timeStep + body.vy;
+   body.y = body.vy*timeStep + body.y;      
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+var AU=149597870700; //astronomical unit (AU/m)
+
+//this is an approximation of "our" solar system, with a subset of the planets
+var bodyArray = [];
+
+var i=0;
+bodyArray[i++] = {name:"Sun", mass:2E30, x:0.0, y:0.0, vx:0.0, vy:0.0 };
+bodyArray[i++] = {name:"Earth", mass:5.9E24, x:150E9, y:0.0, vx:0.0E3, vy:29.78E3 };
+bodyArray[i++] = {name:"Venus", mass:4.8E24, x:108.9E9, y:0.0, vx:0.0, vy:35.0E3 };
+bodyArray[i++] = {name:"Mars", mass:6.4E23, x:(1.5*AU), y:0.0, vx:0.0, vy:24E3 };
+
+
+for (i=0; i < bodyArray.length; i++) 
+{
+    console.log(bodyArray[i].name + ' / ' + bodyArray[i].mass);
+
+    console.log("Force of Sun to earth: " + newtonForce(bodyArray[0],bodyArray[1]) );
+}
+
+
+//paint planet coordinates in meters onto the canvas
+var canvasMeters = 3*AU;
+function paintPlanet(x,y)
+{
+   x+= (canvasMeters/2);
+   y+= (canvasMeters/2);
+
+   x= x/canvasMeters*600;
+   y= y/canvasMeters*600;
+
+   paintPixel(x,y);
+}
+
+
+var t=0.0;
+var timeStep=30*60*60;//half an hour
+var tDuration = 10*365*24*60*60;//two years
+
+while( t < tDuration )
+{
+   for(var i=0; i < bodyArray.length; i++)
+   {
+      simulateBodyMove(i,bodyArray,timeStep);
+      paintPlanet(bodyArray[i].x,bodyArray[i].y);
+   }
+   //console.log("t[d]=" + t/(24*60*60) + " Earth x=" + bodyArray[1].x + " y:" + bodyArray[1].y);
+   t += timeStep;
+}
+
+
+</script>
+
+
+
+
+
+</body>
+</html>
