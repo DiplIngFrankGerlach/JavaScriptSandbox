@@ -105,10 +105,14 @@ var bodyArray = [];
 
 var i=0;
 bodyArray[i++] = {name:"Sun", mass:2E30, x:0.0, y:0.0, vx:0.0, vy:0.0 };
+bodyArray[i++] = {name:"Mercury", mass:3.3E23, x:69.8E9, y:0.0, vx:0.0E3, vy:47.3E3 };
 bodyArray[i++] = {name:"Earth", mass:5.9E24, x:150E9, y:0.0, vx:0.0E3, vy:29.78E3 };
 bodyArray[i++] = {name:"Venus", mass:4.8E24, x:108.9E9, y:0.0, vx:0.0, vy:35.0E3 };
 bodyArray[i++] = {name:"Mars", mass:6.4E23, x:(1.5*AU), y:0.0, vx:0.0, vy:24E3 };
-
+bodyArray[i++] = {name:"Jupiter", mass:1.89E27, x:778E9, y:0.0, vx:0.0, vy:13E3 };
+bodyArray[i++] = {name:"Saturn", mass:5.68E26, x:1352E9, y:0.0, vx:0.0, vy:9.68E3 };
+bodyArray[i++] = {name:"Uranus", mass:8.68E25, x:19*AU, y:0.0, vx:0.0, vy:6.8E3 };
+bodyArray[i++] = {name:"Neptune", mass:1.02E26, x:30*AU, y:0.0, vx:0.0, vy:5.43E3 };
 
 for (i=0; i < bodyArray.length; i++) 
 {
@@ -119,7 +123,7 @@ for (i=0; i < bodyArray.length; i++)
 
 
 //paint planet coordinates in meters onto the canvas
-var canvasMeters = 3*AU;
+var canvasMeters = 40*AU;
 function paintPlanet(x,y)
 {
    x+= (canvasMeters/2);
@@ -134,7 +138,7 @@ function paintPlanet(x,y)
 
 var t=0.0;
 var timeStep=30*60*60;//half an hour
-var tDuration = 10*365*24*60*60;//two years
+var tDuration = 100*365*24*60*60;//two years
 
 while( t < tDuration )
 {
